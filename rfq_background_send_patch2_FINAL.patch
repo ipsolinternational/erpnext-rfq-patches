@@ -1,0 +1,11 @@
+--- a/erpnext/buying/doctype/request_for_quotation/request_for_quotation.py
++++ b/erpnext/buying/doctype/request_for_quotation/request_for_quotation.py
+@@ -163,7 +163,7 @@
+ 		for supplier in self.suppliers:
+ 			supplier.email_sent = 0
+ 			supplier.quote_status = "Pending"
+-		self.send_to_supplier()
++		self.queue_action("send_to_supplier")
+ 
+ 	def before_print(self, settings=None):
+ 		"""Use the first suppliers data to render the print preview."""
