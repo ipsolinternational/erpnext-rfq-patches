@@ -1,0 +1,16 @@
+diff --git a/erpnext/buying/doctype/request_for_quotation/request_for_quotation.py b/erpnext/buying/doctype/request_for_quotation/request_for_quotation.py
+--- a/erpnext/buying/doctype/request_for_quotation/request_for_quotation.py
++++ b/erpnext/buying/doctype/request_for_quotation/request_for_quotation.py
+@@ -169,7 +169,8 @@ class RequestforQuotation(BuyingController):
+ 	def on_submit(self):
+ 		self.db_set("status", "Submitted")
+ 		for supplier in self.suppliers:
+ 			supplier.email_sent = 0
+ 			supplier.quote_status = "Pending"
+-		self.send_to_supplier()
++		frappe.enqueue(
++			"erpnext.buying.doctype.request_for_quotation.request_for_quotation.send_supplier_emails",
++			rfq_name=self.name, queue="long", enqueue_after_commit=True
++		)
+
+ 	def before_print(self, settings=None):
